@@ -1,6 +1,6 @@
 package com.personal_blog.my_personal_blog.Post;
 
-import jakarta.persistence.Id;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
