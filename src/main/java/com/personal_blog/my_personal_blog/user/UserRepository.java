@@ -1,4 +1,4 @@
-package com.personal_blog.my_personal_blog.User;
+package com.personal_blog.my_personal_blog.user;
 
 
 import org.springframework.data.mongodb.repository.MongoRepository;

@@ -1,5 +1,6 @@
-package com.personal_blog.my_personal_blog.User;
+package com.personal_blog.my_personal_blog.user;
 
+import com.personal_blog.my_personal_blog.dto.UserUpdateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -67,3 +68,4 @@ public class UserService implements UserDetailsService {
         );
     }
 }
+

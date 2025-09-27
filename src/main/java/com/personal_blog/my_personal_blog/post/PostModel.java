@@ -1,5 +1,6 @@
-package com.personal_blog.my_personal_blog.Post;
+package com.personal_blog.my_personal_blog.post;
 
+import com.personal_blog.my_personal_blog.shared.enums.Status;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 

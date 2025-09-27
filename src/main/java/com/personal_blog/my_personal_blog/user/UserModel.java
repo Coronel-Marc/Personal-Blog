@@ -1,6 +1,7 @@
-package com.personal_blog.my_personal_blog.User;
+package com.personal_blog.my_personal_blog.user;
 
 
+import com.personal_blog.my_personal_blog.shared.enums.Role;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 

@@ -1,4 +1,4 @@
-package com.personal_blog.my_personal_blog.Post;
+package com.personal_blog.my_personal_blog.shared.enums;
 
 public enum Status {
     DRAFT,

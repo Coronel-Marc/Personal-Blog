@@ -1,4 +1,4 @@
-package com.personal_blog.my_personal_blog.Comment;
+package com.personal_blog.my_personal_blog.comment;
 
 
 import org.springframework.data.annotation.Id;
