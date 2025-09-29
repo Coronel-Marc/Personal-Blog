@@ -4,9 +4,11 @@ import com.personal_blog.my_personal_blog.dto.PostCreateDTO;
 import com.personal_blog.my_personal_blog.dto.PostResponseDTO;
 import com.personal_blog.my_personal_blog.shared.enums.Status;
 import com.personal_blog.my_personal_blog.user.UserModel;
+import com.personal_blog.my_personal_blog.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.server.ResponseStatusException;
@@ -24,6 +26,9 @@ public class PostService {
 
     @Autowired
     private PostRepository repository;
+
+    @Autowired
+    private UserService userService;
 
     public PostResponseDTO createPost(PostCreateDTO createDTO, UserModel author){
         PostModel postModel = new PostModel();
@@ -60,9 +65,18 @@ public class PostService {
         return postModel.map(this::toResponseDTO);
     }
 
-    public PostResponseDTO updatePost(String id, PostCreateDTO postUpateDTO){
+    public PostResponseDTO updatePost(String id, PostCreateDTO postUpateDTO, UserDetails currentUser){
         PostModel post = getPostById(id);
         // Adicionar lógica para verificar se usuario é o dono do post ou ADMIN
+        UserModel author = userService.findByEmail(currentUser.getUsername());
+
+        boolean isAdmin = currentUser.getAuthorities().stream()
+                .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
+
+        if(!post.getAuthorId().equals(author.getId()) && !isAdmin){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Você não tem permissão para alterar esse post.");
+        }
+
         post.setTitle(postUpateDTO.getTitle());
         post.setSlug(toSlug(postUpateDTO.getTitle()));
         post.setContent(postUpateDTO.getContent());
@@ -72,9 +86,17 @@ public class PostService {
         return toResponseDTO(repository.save(post));
     }
 
-    public void deletePostById(String id){
+    public void deletePostById(String id, UserDetails currentUser){
         PostModel post = getPostById(id);
         // Adicionar lógica para verificar se usuario é o dono do post ou ADMIN
+        UserModel author = userService.findByEmail(currentUser.getUsername());
+
+        boolean isAdmin = currentUser.getAuthorities().stream()
+                .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
+
+        if(!post.getAuthorId().equals(author.getId()) && !isAdmin){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Você não tem permissão para deletar esse post.");
+        }
 
         post.setDeletedAt(Instant.now());
 
