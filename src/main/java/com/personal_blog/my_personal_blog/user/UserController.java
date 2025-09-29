@@ -1,5 +1,6 @@
 package com.personal_blog.my_personal_blog.user;
 
+import com.personal_blog.my_personal_blog.dto.UserCreateDTO;
 import com.personal_blog.my_personal_blog.dto.UserUpdateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,15 +30,16 @@ public class UserController {
     }
 
     @PutMapping(value = "/{id}")
-    public UserModel modifieUser(@PathVariable String id, @RequestBody @Validated UserUpdateDTO userDTO, UserModel user) {
-        return service.modifieUser(id, userDTO, user);
+    public ResponseEntity<UserModel> modifieUser(@PathVariable String id, @RequestBody @Validated UserUpdateDTO userDTO) {
+        UserModel updatedUser = service.modifieUser(id, userDTO);
+        return ResponseEntity.ok(updatedUser);
 
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<UserModel> insert(@RequestBody @Validated UserModel user){
-        UserModel newUser = service.newUser(user);
+    public ResponseEntity<UserModel> insert(@RequestBody @Validated UserCreateDTO userDTO){
+        UserModel newUser = service.newUser(userDTO);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(newUser.getId()).toUri();

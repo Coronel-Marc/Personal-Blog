@@ -2,10 +2,12 @@ package com.personal_blog.my_personal_blog.user;
 
 
 import com.personal_blog.my_personal_blog.shared.enums.Role;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
+import java.util.Set;
 
 @Document(collection = "users")
 public class UserModel {
@@ -17,16 +19,18 @@ public class UserModel {
     private String email;
     private String password;
     private String profileImageUrl;
-    private Role role;
+    private Set<Role> roles;
+
+    @CreatedDate
     private Instant createdAt;
 
     public UserModel(){}
-    public UserModel(String name, String email, String password,String profileImageUrl, Role role, Instant createdAt) {
+    public UserModel(String name, String email, String password, String profileImageUrl, Set<Role> roles, Instant createdAt) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.profileImageUrl = profileImageUrl;
-        this.role = role;
+        this.roles = roles;
         this.createdAt = createdAt;
     }
 
@@ -71,12 +75,12 @@ public class UserModel {
         this.profileImageUrl = profileImageUrl;
     }
 
-    public Role getRole() {
-        return role;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setRole(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public Instant getCreatedAt() {

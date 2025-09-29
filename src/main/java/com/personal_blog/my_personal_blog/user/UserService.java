@@ -1,6 +1,8 @@
 package com.personal_blog.my_personal_blog.user;
 
+import com.personal_blog.my_personal_blog.dto.UserCreateDTO;
 import com.personal_blog.my_personal_blog.dto.UserUpdateDTO;
+import com.personal_blog.my_personal_blog.shared.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,18 +25,20 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public UserModel newUser (UserModel user) {
+    public UserModel newUser (UserCreateDTO userDTO) {
+        UserModel user = new UserModel();
+        user.setName(userDTO.getName());
+        user.setEmail(userDTO.getEmail());
+        user.setRole(Collections.singleton(Role.ROLE_USER));
 
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
         user.setPassword(encodedPassword);
-
-        user.setCreatedAt(Instant.now());
-
         return repository.save(user);
     }
 
-    public UserModel modifieUser (String id, UserUpdateDTO userDTO, UserModel user) {
+    public UserModel modifieUser (String id, UserUpdateDTO userDTO) {
         //Lógica de modificação aqui
+        UserModel user = getUserById(id);
         user.setName(userDTO.getName());
         user.setProfileImageUrl(userDTO.getImageProfileUrl());
 
@@ -64,7 +68,7 @@ public class UserService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
                 user.getPassword(),
-                Collections.emptyList()
+                user.getRoles()
         );
     }
 }

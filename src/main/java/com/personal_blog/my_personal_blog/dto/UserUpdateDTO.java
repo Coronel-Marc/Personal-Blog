@@ -1,6 +1,6 @@
 package com.personal_blog.my_personal_blog.dto;
 
-public class UserUpdateDTO{
+public class UserUpdateDTO {
 
     private String name;
     private String imageProfileUrl;
