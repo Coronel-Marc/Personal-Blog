@@ -71,5 +71,11 @@ public class UserService implements UserDetailsService {
                 user.getRoles()
         );
     }
+
+    // -- FIND BY EMAIL METHOD --
+    public UserModel findByEmail(String email){
+        return repository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario não encontrado nesse e-mail:" + email));
+    }
 }
 
