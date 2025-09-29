@@ -1,6 +1,7 @@
 package com.personal_blog.my_personal_blog.post;
 
 import com.personal_blog.my_personal_blog.dto.PostCreateDTO;
+import com.personal_blog.my_personal_blog.dto.PostResponseDTO;
 import com.personal_blog.my_personal_blog.dto.UserUpdateDTO;
 import com.personal_blog.my_personal_blog.user.UserModel;
 import com.personal_blog.my_personal_blog.user.UserService;
@@ -31,35 +32,36 @@ public class PostController {
     // --- PUBLIC ENDPOINTS ---
 
     @GetMapping
-    public ResponseEntity<Page<PostModel>> getAll(Pageable pageable) {
+    public ResponseEntity<Page<PostResponseDTO>> getAll(Pageable pageable) {
         return ResponseEntity.ok(service.getAllPublicPosts(pageable));
     }
     @GetMapping(value = "/{slug}")
-    public ResponseEntity<PostModel> getBySlug(@PathVariable String slug){
-        return ResponseEntity.ok(service.getPostBySlug(slug));
+    public ResponseEntity<PostResponseDTO> getBySlug(@PathVariable String slug){
+        return ResponseEntity.ok(service.getPostDTOBySlug(slug));
     }
 
     // -- PROTECTED ENDPOINTS ---
 
     @PostMapping
-    public ResponseEntity<PostModel> create(@RequestBody @Validated PostCreateDTO postDTO, @AuthenticationPrincipal UserDetails userDetails){
+    public ResponseEntity<PostResponseDTO> createPost(@RequestBody @Validated PostCreateDTO createDTO, @AuthenticationPrincipal UserDetails userDetails){
         UserModel author = userService.findByEmail(userDetails.getUsername());
-        author.setId("Id");
-        author.setName(userDetails.getUsername());
 
-        PostModel newPost = service.createPost(postDTO, author);
+        PostResponseDTO responseDTO = service.createPost(createDTO, author);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(newPost.getId()).toUri();
-        return ResponseEntity.created(location).body(newPost);
+                .buildAndExpand(responseDTO.getId()).toUri();
+        return ResponseEntity.created(location).body(responseDTO);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<PostModel> update(@PathVariable String id, @RequestBody @Validated PostCreateDTO postUpdateDTO){
-        return null; // To be Implemented
+    public ResponseEntity<PostResponseDTO> updatePost(@PathVariable String id, @RequestBody @Validated PostCreateDTO postUpdateDTO){
+        PostResponseDTO updatedPost = service.updatePost(id, postUpdateDTO);
+        return ResponseEntity.ok(updatedPost);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<PostModel> delete(@PathVariable String id){
-        return null; // To be implemented
+    public ResponseEntity<Void> deletePost(@PathVariable String id){
+        service.deletePostById(id);
+
+        return ResponseEntity.noContent().build();
     }
 }
