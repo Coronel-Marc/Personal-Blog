@@ -79,7 +79,7 @@ public class UserModel {
         return roles;
     }
 
-    public void setRole(Set<Role> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 

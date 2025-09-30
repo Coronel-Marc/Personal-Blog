@@ -1,6 +1,7 @@
 package com.personal_blog.my_personal_blog.user;
 
 import com.personal_blog.my_personal_blog.dto.UserCreateDTO;
+import com.personal_blog.my_personal_blog.dto.UserResponseDTO;
 import com.personal_blog.my_personal_blog.dto.UserUpdateDTO;
 import com.personal_blog.my_personal_blog.shared.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class UserService implements UserDetailsService {
         UserModel user = new UserModel();
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
-        user.setRole(Collections.singleton(Role.ROLE_USER));
+        user.setRoles(Collections.singleton(Role.ROLE_USER));
 
         String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
         user.setPassword(encodedPassword);
@@ -69,6 +69,17 @@ public class UserService implements UserDetailsService {
                 user.getEmail(),
                 user.getPassword(),
                 user.getRoles()
+        );
+    }
+    // -- UTILITIES METHODS
+
+    private UserResponseDTO toUserResponseDTO(UserModel userModel){
+        return new UserResponseDTO(
+                userModel.getId(),
+                userModel.getName(),
+                userModel.getEmail(),
+                userModel.getProfileImageUrl(),
+                userModel.getRoles()
         );
     }
 
