@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -25,7 +26,7 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public UserModel newUser (UserCreateDTO userDTO) {
+    public UserResponseDTO newUser (UserCreateDTO userDTO) {
         UserModel user = new UserModel();
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
@@ -33,25 +34,33 @@ public class UserService implements UserDetailsService {
 
         String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
         user.setPassword(encodedPassword);
-        return repository.save(user);
+        UserModel savedUser = repository.save(user);
+        return toUserResponseDTO(savedUser);
     }
 
-    public UserModel modifieUser (String id, UserUpdateDTO userDTO) {
+    public UserResponseDTO modifieUser (String id, UserUpdateDTO userDTO) {
         //Lógica de modificação aqui
         UserModel user = getUserById(id);
         user.setName(userDTO.getName());
         user.setProfileImageUrl(userDTO.getImageProfileUrl());
 
-        return repository.save(user);
+        UserModel savedUser = repository.save(user);
+
+        return toUserResponseDTO(savedUser);
     }
 
-    public UserModel getUserById (String id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario não encontrado"));
+    public UserResponseDTO getUserDTOById (String id) {
+        UserModel user = getUserById(id);
+        return toUserResponseDTO(user);
     }
 
-    public List<UserModel> getAllUsers (){
-        return repository.findAll();
+    public List<UserResponseDTO> getAllUsers (){
+        List<UserModel> users = repository.findAll();
+
+        return users.stream()
+                .map(this::toUserResponseDTO)
+                .collect(Collectors.toList());
+
     }
 
     public void deleteById (String id) {
@@ -87,6 +96,11 @@ public class UserService implements UserDetailsService {
     public UserModel findByEmail(String email){
         return repository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario não encontrado nesse e-mail:" + email));
+    }
+
+    private UserModel getUserById (String id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario não encontrado"));
     }
 }
 
