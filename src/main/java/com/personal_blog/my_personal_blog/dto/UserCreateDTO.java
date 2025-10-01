@@ -1,8 +1,18 @@
 package com.personal_blog.my_personal_blog.dto;
 
-public class UserCreateDTO {
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
-    private String name, email, password;
+public class UserCreateDTO {
+    @NotBlank
+    private String name;
+    @NotBlank
+    @Email
+    private String email;
+    @NotBlank
+    @Size(min = 8, max = 50)
+    private String password;
 
     public UserCreateDTO(){}
 

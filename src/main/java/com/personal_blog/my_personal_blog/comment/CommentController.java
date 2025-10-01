@@ -18,7 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequestMapping(value = "/api/posts/{postId}/comments")
+@RequestMapping(value = "/posts/{postId}/comments")
 public class CommentController {
 
     @Autowired

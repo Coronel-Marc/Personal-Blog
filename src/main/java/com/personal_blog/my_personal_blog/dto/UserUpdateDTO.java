@@ -1,8 +1,13 @@
 package com.personal_blog.my_personal_blog.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.URL;
+
 public class UserUpdateDTO {
 
+    @NotBlank
     private String name;
+    @URL
     private String imageProfileUrl;
 
     public UserUpdateDTO(){}

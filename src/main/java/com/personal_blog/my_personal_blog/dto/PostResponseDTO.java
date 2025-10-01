@@ -1,14 +1,25 @@
 package com.personal_blog.my_personal_blog.dto;
 
 import com.personal_blog.my_personal_blog.shared.enums.Status;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.time.Instant;
 import java.util.List;
 
 public class PostResponseDTO {
 
-    private String id, title, content, slug, authorName;
+    private String id;
+    @NotBlank
+    @Size(max = 250)
+    private String title;
+    @NotBlank
+    private String content;
+    private String slug;
+    private String authorName;
     private List<String> tags;
+    @NotNull
     private Status status;
     private Instant createdAt;
 

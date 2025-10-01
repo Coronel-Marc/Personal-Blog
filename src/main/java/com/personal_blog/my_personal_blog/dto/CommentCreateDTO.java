@@ -1,8 +1,13 @@
 package com.personal_blog.my_personal_blog.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class CommentCreateDTO {
 
-    private String content, postId, authorId;
+    @NotBlank
+    private String content;
+    private String postId;
+    private String authorId;
 
     public CommentCreateDTO(){}
     public CommentCreateDTO(String content, String postId, String authorId){
