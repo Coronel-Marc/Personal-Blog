@@ -1,4 +1,4 @@
-package com.personal_blog.my_personal_blog.dto;
+package com.personal_blog.my_personal_blog.dto.userDTO;
 
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.URL;

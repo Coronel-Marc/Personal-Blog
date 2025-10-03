@@ -1,7 +1,7 @@
 package com.personal_blog.my_personal_blog.post;
 
-import com.personal_blog.my_personal_blog.dto.PostCreateDTO;
-import com.personal_blog.my_personal_blog.dto.PostResponseDTO;
+import com.personal_blog.my_personal_blog.dto.postDTO.PostCreateDTO;
+import com.personal_blog.my_personal_blog.dto.postDTO.PostResponseDTO;
 import com.personal_blog.my_personal_blog.user.UserModel;
 import com.personal_blog.my_personal_blog.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

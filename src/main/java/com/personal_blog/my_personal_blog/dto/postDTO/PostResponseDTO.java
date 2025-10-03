@@ -1,4 +1,4 @@
-package com.personal_blog.my_personal_blog.dto;
+package com.personal_blog.my_personal_blog.dto.postDTO;
 
 import com.personal_blog.my_personal_blog.shared.enums.Status;
 import jakarta.validation.constraints.NotBlank;

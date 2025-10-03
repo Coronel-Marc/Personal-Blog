@@ -1,8 +1,8 @@
 package com.personal_blog.my_personal_blog.comment;
 
-import com.personal_blog.my_personal_blog.dto.CommentCreateDTO;
-import com.personal_blog.my_personal_blog.dto.CommentResponseDTO;
-import com.personal_blog.my_personal_blog.dto.CommentUpdateDTO;
+import com.personal_blog.my_personal_blog.dto.commentDTO.CommentCreateDTO;
+import com.personal_blog.my_personal_blog.dto.commentDTO.CommentResponseDTO;
+import com.personal_blog.my_personal_blog.dto.commentDTO.CommentUpdateDTO;
 import com.personal_blog.my_personal_blog.user.UserModel;
 import com.personal_blog.my_personal_blog.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

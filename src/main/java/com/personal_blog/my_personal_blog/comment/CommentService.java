@@ -1,8 +1,11 @@
 package com.personal_blog.my_personal_blog.comment;
 
-import com.personal_blog.my_personal_blog.dto.CommentCreateDTO;
-import com.personal_blog.my_personal_blog.dto.CommentResponseDTO;
-import com.personal_blog.my_personal_blog.dto.CommentUpdateDTO;
+import com.personal_blog.my_personal_blog.dto.commentDTO.CommentCreateDTO;
+import com.personal_blog.my_personal_blog.dto.commentDTO.CommentResponseDTO;
+import com.personal_blog.my_personal_blog.dto.commentDTO.CommentUpdateDTO;
+import com.personal_blog.my_personal_blog.exceptions.BadRequestException;
+import com.personal_blog.my_personal_blog.exceptions.ForbiddenAccessException;
+import com.personal_blog.my_personal_blog.exceptions.ResourceNotFoundException;
 import com.personal_blog.my_personal_blog.post.PostRepository;
 import com.personal_blog.my_personal_blog.user.UserModel;
 import com.personal_blog.my_personal_blog.user.UserService;
@@ -36,7 +39,7 @@ public class CommentService {
             UserModel author){
 
         postRepository.findById(postId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Post não encontrado"));
 
         CommentModel newComment = new CommentModel();
         newComment.setPostId(postId);
@@ -75,9 +78,9 @@ public class CommentService {
                 .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
 
         if(!comment.getAuthorId().equals(author.getId()) && !isAdmin){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Você não tem permissão para alterar esse comentário");
+            throw new ForbiddenAccessException("Você não tem permissão para alterar esse comentário");
         } else if (!comment.getPostId().equals(postId)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Requisição inconsistente: O comentário não pertence ao post especificado.");
+            throw new BadRequestException("Requisição inconsistente: O comentário não pertence ao post especificado.");
         }
 
         comment.setContent(commentDTO.getContent());
@@ -99,9 +102,9 @@ public class CommentService {
                 .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
 
         if(!comment.getAuthorId().equals(author.getId()) && !isAdmin){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Você não tem permissão para deletar esse post.");
+            throw new ForbiddenAccessException("Você não tem permissão para deletar esse comentário.");
         } else if (!comment.getPostId().equals(postId)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requisição inconsistente: O comentário não pertence ao post especificado.");
+            throw new BadRequestException("Requisição inconsistente: O comentário não pertence ao post especificado.");
         }
 
         comment.setDeletedAt(Instant.now());
@@ -129,6 +132,6 @@ public class CommentService {
 
     private CommentModel getCommentById(String id){
         return repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Comentário não encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Comentário não encontrado."));
     }
 }

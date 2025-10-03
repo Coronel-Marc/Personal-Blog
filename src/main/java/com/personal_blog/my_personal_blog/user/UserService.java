@@ -1,8 +1,9 @@
 package com.personal_blog.my_personal_blog.user;
 
-import com.personal_blog.my_personal_blog.dto.UserCreateDTO;
-import com.personal_blog.my_personal_blog.dto.UserResponseDTO;
-import com.personal_blog.my_personal_blog.dto.UserUpdateDTO;
+import com.personal_blog.my_personal_blog.dto.userDTO.UserCreateDTO;
+import com.personal_blog.my_personal_blog.dto.userDTO.UserResponseDTO;
+import com.personal_blog.my_personal_blog.dto.userDTO.UserUpdateDTO;
+import com.personal_blog.my_personal_blog.exceptions.ResourceNotFoundException;
 import com.personal_blog.my_personal_blog.shared.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -100,7 +101,7 @@ public class UserService implements UserDetailsService {
 
     private UserModel getUserById (String id) {
         return repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario não encontrado com o id: " + id));
     }
 }
 

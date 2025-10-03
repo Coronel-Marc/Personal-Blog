@@ -1,7 +1,9 @@
 package com.personal_blog.my_personal_blog.post;
 
-import com.personal_blog.my_personal_blog.dto.PostCreateDTO;
-import com.personal_blog.my_personal_blog.dto.PostResponseDTO;
+import com.personal_blog.my_personal_blog.dto.postDTO.PostCreateDTO;
+import com.personal_blog.my_personal_blog.dto.postDTO.PostResponseDTO;
+import com.personal_blog.my_personal_blog.exceptions.ForbiddenAccessException;
+import com.personal_blog.my_personal_blog.exceptions.ResourceNotFoundException;
 import com.personal_blog.my_personal_blog.shared.enums.Status;
 import com.personal_blog.my_personal_blog.user.UserModel;
 import com.personal_blog.my_personal_blog.user.UserService;
@@ -74,7 +76,7 @@ public class PostService {
                 .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
 
         if(!post.getAuthorId().equals(author.getId()) && !isAdmin){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Você não tem permissão para alterar esse post.");
+            throw new ForbiddenAccessException("Você não tem permissão para alterar esse post.");
         }
 
         post.setTitle(postUpateDTO.getTitle());
@@ -95,7 +97,7 @@ public class PostService {
                 .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
 
         if(!post.getAuthorId().equals(author.getId()) && !isAdmin){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Você não tem permissão para deletar esse post.");
+            throw new ForbiddenAccessException("Você não tem permissão para deletar esse post.");
         }
 
         post.setDeletedAt(Instant.now());
@@ -126,12 +128,12 @@ public class PostService {
 
     private PostModel getPostById(String id){
         return repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Post não encontrado com o id: " + id));
     }
 
     private PostModel getPostBySlug(String slug){
         return repository.findBySlug(slug)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Post não encontrado com o titulo: " + slug));
     }
 
 
