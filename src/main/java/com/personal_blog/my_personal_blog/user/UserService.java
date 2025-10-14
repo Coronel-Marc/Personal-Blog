@@ -6,6 +6,7 @@ import com.personal_blog.my_personal_blog.dto.userDTO.UserUpdateDTO;
 import com.personal_blog.my_personal_blog.exceptions.ResourceNotFoundException;
 import com.personal_blog.my_personal_blog.shared.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,11 +22,17 @@ import java.util.stream.Collectors;
 @Service
 public class UserService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository repository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository repository;
+
+
+    private final PasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository repository, @Lazy PasswordEncoder passwordEncoder) {
+        this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
 
     public UserResponseDTO newUser (UserCreateDTO userDTO) {
         UserModel user = new UserModel();
@@ -75,11 +82,7 @@ public class UserService implements UserDetailsService {
         UserModel user = repository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario não encontrado nesse e-mail:" + username));
 
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                user.getPassword(),
-                user.getRoles()
-        );
+        return user;
     }
     // -- UTILITIES METHODS
 

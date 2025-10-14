@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/auth")
@@ -25,7 +26,7 @@ public class AuthenticationController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping(value = "/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Validated LoginRequestDTO loginRequestDTO){
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid LoginRequestDTO loginRequestDTO){
 
         var usernamePassword = new UsernamePasswordAuthenticationToken(
                 loginRequestDTO.getEmail(),
