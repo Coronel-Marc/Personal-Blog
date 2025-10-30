@@ -22,9 +22,19 @@ public class PostResponseDTO {
     @NotNull
     private Status status;
     private Instant createdAt;
+    private String coverImageUrl;
 
     public PostResponseDTO(){}
-    public PostResponseDTO(String id, String title, String content, String slug,String authorName, List<String> tags, Status status, Instant createdAt) {
+    public PostResponseDTO(
+            String id,
+            String title,
+            String content,
+            String slug,
+            String authorName,
+            List<String> tags,
+            Status status,
+            Instant createdAt,
+            String coverImageUrl) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -33,12 +43,12 @@ public class PostResponseDTO {
         this.tags = tags;
         this.status = status;
         this.createdAt = createdAt;
+        this.coverImageUrl = coverImageUrl;
     }
 
     public String getId() {
         return id;
     }
-
     public void setId(String id) {
         this.id = id;
     }
@@ -46,7 +56,6 @@ public class PostResponseDTO {
     public String getTitle() {
         return title;
     }
-
     public void setTitle(String title) {
         this.title = title;
     }
@@ -54,7 +63,6 @@ public class PostResponseDTO {
     public String getContent() {
         return content;
     }
-
     public void setContent(String content) {
         this.content = content;
     }
@@ -62,7 +70,6 @@ public class PostResponseDTO {
     public String getSlug() {
         return slug;
     }
-
     public void setSlug(String slug) {
         this.slug = slug;
     }
@@ -70,7 +77,6 @@ public class PostResponseDTO {
     public String getAuthorName() {
         return authorName;
     }
-
     public void setAuthorName(String authorName) {
         this.authorName = authorName;
     }
@@ -78,7 +84,6 @@ public class PostResponseDTO {
     public List<String> getTags() {
         return tags;
     }
-
     public void setTags(List<String> tags) {
         this.tags = tags;
     }
@@ -86,7 +91,6 @@ public class PostResponseDTO {
     public Status getStatus() {
         return status;
     }
-
     public void setStatus(Status status) {
         this.status = status;
     }
@@ -94,8 +98,10 @@ public class PostResponseDTO {
     public Instant getCreatedAt() {
         return createdAt;
     }
-
     public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
+
+    public String getCoverImageUrl() { return coverImageUrl; }
+    public void setCoverImageUrl(String coverImageUrl) { this.coverImageUrl = coverImageUrl; }
 }

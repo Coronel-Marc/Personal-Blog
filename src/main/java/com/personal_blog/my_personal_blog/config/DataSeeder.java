@@ -37,7 +37,7 @@ public class DataSeeder implements CommandLineRunner{
     private void seedAdminUser() {
         if(userRepository.findByEmail(adminEmail).isEmpty()){
             UserModel adminUser = new UserModel();
-            adminUser.setName("Admin");
+            adminUser.setName("Marcos");
             adminUser.setEmail(adminEmail);
 
             adminUser.setPassword(passwordEncoder.encode(adminPassword));
@@ -46,7 +46,7 @@ public class DataSeeder implements CommandLineRunner{
 
             userRepository.save(adminUser);
 
-            logger.info("Usuario ADMIN padrão criado com sucesso. Email: {}, senha: {}",adminEmail, adminPassword);
+            logger.info("Usuario ADMIN padrão criado com sucesso.Nome: {}, Email: {}, senha: {}",adminEmail, adminPassword, adminUser.getName());
         } else {
             logger.info("Usuario ADMIN padrão já existe. Nenhuma ação necessária.{} - {}", adminEmail, adminPassword);
         }

@@ -4,6 +4,7 @@ import com.personal_blog.my_personal_blog.shared.enums.Status;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.URL;
 
 import java.util.List;
 
@@ -17,13 +18,16 @@ public class PostCreateDTO {
     private List<String> tags;
     @NotNull
     private Status status;
+    @URL(message = "URL da imagem de capa inválida")
+    private String coverImageUrl;
 
     public PostCreateDTO(){}
-    public PostCreateDTO(String title, String content, Status status, List<String> tags){
+    public PostCreateDTO(String title, String content, Status status, List<String> tags, String coverImageUrl){
         this.title = title;
         this.content = content;
         this.status = status;
         this.tags = tags;
+        this.coverImageUrl = coverImageUrl;
     }
 
     public String getTitle(){
@@ -53,4 +57,8 @@ public class PostCreateDTO {
     public void setStatus(Status status){
         this.status = status;
     }
+
+    public String getCoverImageUrl() { return coverImageUrl; }
+
+    public void setCoverImageUrl(String coverImageUrl) { this.coverImageUrl = coverImageUrl; }
 }

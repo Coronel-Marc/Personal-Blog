@@ -39,6 +39,7 @@ public class PostService {
         postModel.setContent(createDTO.getContent());
         postModel.setTags(createDTO.getTags());
         postModel.setStatus(createDTO.getStatus());
+        postModel.setCoverImageUrl(createDTO.getCoverImageUrl());
 
         postModel.setAuthorId(author.getId());
         postModel.setAuthorName(author.getName());
@@ -66,10 +67,15 @@ public class PostService {
 
         return postModel.map(this::toResponseDTO);
     }
+    public Page<PostResponseDTO> getAllPublicPostsForAdmin(Pageable pageable){
+        Page<PostModel> postModels = repository.findAll(pageable);
+
+        return postModels.map(this::toResponseDTO);
+    }
 
     public PostResponseDTO updatePost(String id, PostCreateDTO postUpateDTO, UserDetails currentUser){
         PostModel post = getPostById(id);
-        // Adicionar lógica para verificar se usuario é o dono do post ou ADMIN
+        // Adicionar lógica para verificar se usuario é o dono do post ou ADMIN.
         UserModel author = userService.findByEmail(currentUser.getUsername());
 
         boolean isAdmin = currentUser.getAuthorities().stream()
@@ -84,6 +90,7 @@ public class PostService {
         post.setContent(postUpateDTO.getContent());
         post.setTags(postUpateDTO.getTags());
         post.setStatus(postUpateDTO.getStatus());
+        post.setCoverImageUrl(postUpateDTO.getCoverImageUrl());
 
         return toResponseDTO(repository.save(post));
     }
@@ -122,7 +129,8 @@ public class PostService {
                 postModel.getAuthorName(),
                 postModel.getTags(),
                 postModel.getStatus(),
-                postModel.getCreatedAt()
+                postModel.getCreatedAt(),
+                postModel.getCoverImageUrl()
         );
     }
 

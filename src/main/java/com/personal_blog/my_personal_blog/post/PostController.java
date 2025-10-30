@@ -8,11 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 
@@ -20,17 +23,31 @@ import java.net.URI;
 @RequestMapping(value = "/posts")
 public class PostController {
 
+    private static final Logger log = LoggerFactory.getLogger(PostController.class);
     @Autowired
     private PostService service;
 
     @Autowired
     private UserService userService;
 
+    private static final Logger logger = LoggerFactory.getLogger(PostController.class);
     // --- PUBLIC ENDPOINTS ---
 
     @GetMapping
-    public ResponseEntity<Page<PostResponseDTO>> getAll(Pageable pageable) {
-        return ResponseEntity.ok(service.getAllPublicPosts(pageable));
+    public ResponseEntity<Page<PostResponseDTO>> getAll(Pageable pageable, @AuthenticationPrincipal UserDetails currentUser) {
+        boolean isAdmin = false;
+        if (currentUser != null){
+            isAdmin = currentUser.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .anyMatch("ROLE_ADMIN"::equals);
+        }
+        if (isAdmin){
+            log.info("Usuario admin detectado. Buscando todos os posts.");
+            return ResponseEntity.ok(service.getAllPublicPostsForAdmin(pageable));
+        } else {
+            log.info("Usuario não admin ou anônimo. Buscando apenas posts públicos.");
+            return ResponseEntity.ok(service.getAllPublicPosts(pageable));
+        }
     }
     @GetMapping(value = "/{slug}")
     public ResponseEntity<PostResponseDTO> getBySlug(@PathVariable String slug){
@@ -38,6 +55,7 @@ public class PostController {
     }
 
     // -- PROTECTED ENDPOINTS ---
+
 
     @PostMapping
     public ResponseEntity<PostResponseDTO> createPost(@RequestBody @Validated PostCreateDTO createDTO, @AuthenticationPrincipal UserDetails userDetails){
