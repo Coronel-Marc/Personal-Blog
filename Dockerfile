@@ -17,11 +17,11 @@ FROM eclipse-temurin:21-jre-jammy
 
 WORKDIR /app
 
-# Copia APENAS o .jar construído do estágio de build
+
 # O nome do .jar vem do seu pom.xml (artifactId e version)
 COPY --from=build /app/target/my-personal-blog-0.0.1-SNAPSHOT.jar app.jar
 
-# Expõe a porta 8080 (que o Spring usa por padrão)
+# Expoe a porta 8080 (que o Spring usa por padrao)
 EXPOSE 8080
 
 # Comando para iniciar a aplicação
