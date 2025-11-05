@@ -91,7 +91,9 @@ public class SecurityConfig {
 
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:5173",
-                "https://personal-blog-frontend-beige.vercel.app"));
+                "https://personal-blog-frontend-beige.vercel.app",
+                "https://personal-blog-frontend-faoym8j3e-marcos-projects-2f51e003.vercel.app"
+        ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
